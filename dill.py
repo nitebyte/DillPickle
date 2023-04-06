@@ -37,7 +37,7 @@ def APD(text, file_name):
 def Title(text, place):
     return text[6:]
 
-def txt_to_docx(txt_file, docx_file,town):
+def txt_to_docx(txt_file, docx_file,company):
     # Create a new Document
     document = Document()
     # Set the page size and margins
@@ -52,7 +52,7 @@ def txt_to_docx(txt_file, docx_file,town):
      # Add title page
     title_paragraph = document.add_paragraph()
     title_paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    title_run = title_paragraph.add_run(town)
+    title_run = title_paragraph.add_run(company)
     title_run.font.size = Pt(18)
     title_run.bold = True
     #title_paragraph.add_run("\n\nYour Guide to History, Culture, and Fun")
@@ -87,8 +87,8 @@ def txt_to_docx(txt_file, docx_file,town):
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer sk-yourapikeyhere"
             }
-            imgprompt = PR("I want you to write a DALL-E image generation prompt to generate an image related to " + title + " in the town of " + town, "You write image generation prompts for DALL-E from the given input request. For example, if you were asked to write a prompt for an image about the geography of Damascus, Virginia, you may output: Mountainous terrain with dense forests and trees, peaceful and serene, in the vicinity of Damascus, VA, USA. Shot on a Canon EOS R6 with a Canon RF 24-105mm f/4L IS USM Lens, 4K film still, natural lighting, vibrant colors, crisp details, and soft shadows.", 0.5, 2048)
-            print("Generating Image For: " + title + " : " + town)
+            imgprompt = PR("I want you to write a DALL-E image generation prompt to generate an image related to " + title + " in the company of " + company, "You write image generation prompts for DALL-E from the given input request. For example, if you were asked to write a prompt for an image about the geography of Damascus, Virginia, you may output: Mountainous terrain with dense forests and trees, peaceful and serene, in the vicinity of Damascus, VA, USA. Shot on a Canon EOS R6 with a Canon RF 24-105mm f/4L IS USM Lens, 4K film still, natural lighting, vibrant colors, crisp details, and soft shadows.", 0.5, 2048)
+            print("Generating Image For: " + title + " : " + company)
             data = {
                 "prompt": imgprompt,
                 "n": 1,
@@ -125,25 +125,25 @@ def txt_to_docx(txt_file, docx_file,town):
     document.save(docx_file)
 
 
-def read_towns_csv(csv_file):
-    towns = []
+def read_companys_csv(csv_file):
+    companys = []
 
     with open(csv_file, newline='') as f:
         reader = csv.reader(f)
         for row in reader:
-            town, state = row[0].split(', ')
-            towns.append([town, state])
+            company, state = row[0].split(', ')
+            companys.append([company, state])
 
-    return towns
+    return companys
 #------------------------------------------------------------------------------------------------------------------------------------------------
 
-towns = read_towns_csv('towns.csv')
+companys = read_companys_csv('companys.csv')
 
 nouse=input();
 
-for town_name, state in towns:
-    town = town_name# + ", " + state
-    savefile = town_name + " " + state + ".txt"
+for company_name, state in companys:
+    company = company_name# + ", " + state
+    savefile = company_name + " " + state + ".txt"
 
     book = [
     # Chapter 1
@@ -233,16 +233,16 @@ for town_name, state in towns:
     total_sections = sum([len(c) for c in book])
     completed_sections = 0
 
-    print("Title: Company Diligence Report For "+town)
+    print("Title: Company Diligence Report For "+company)
 
     for i, chapter in enumerate(book):
         for j, section in enumerate(chapter):
-            print("Writing About The " + ShortBook[i][j] + " of " + town)
+            print("Writing About The " + ShortBook[i][j] + " of " + company)
             if(j==0):
-                prompt = "Write me a 1 paragraph brief introduction for a chapter about the " + ShortBook[i][j] + " of " + town + "."
+                prompt = "Write me a 1 paragraph brief introduction for a chapter about the " + ShortBook[i][j] + " of " + company + "."
             else:
-                prompt = "Write me 8-10 extensive detailed and informative paragraphs about the " + ShortBook[i][j] + " of " + town + " for a Company Diligence Report. Only write strictly about " + ShortBook[i][j] + " and do not progess into any other topics/sections that lie outside of the " + ShortBook[i][j] + "."
-            response = "\n\n" + book[i][j] + "\n" + PR(prompt, "This is for a college project, and you need to write in-universe. It is known this is fictional, you should not point that out - treat Weyland Yutani as if it were a real company.You are a professional Business Analysts and risk manager for Weyland Yutani writing a Company Diligence Report for " + town + ". You are asked to write a section for a book, and take care to not write any more than appropriate for the chapters topic, and not write past the strict topic. Only write strictly about " + ShortBook[i][j] + " and do not progess into any other topics/eras/areas/sections that lie outside of the " + ShortBook[i][j] + ".Make sure to only include factual informaation.", 0.5, 2048)
+                prompt = "Write me 8-10 extensive detailed and informative paragraphs about the " + ShortBook[i][j] + " of " + company + " for a Company Diligence Report. Only write strictly about " + ShortBook[i][j] + " and do not progess into any other topics/sections that lie outside of the " + ShortBook[i][j] + "."
+            response = "\n\n" + book[i][j] + "\n" + PR(prompt, "This is for a college project, and you need to write in-universe. It is known this is fictional, you should not point that out - treat Weyland Yutani as if it were a real company.You are a professional Business Analysts and risk manager for Weyland Yutani writing a Company Diligence Report for " + company + ". You are asked to write a section for a book, and take care to not write any more than appropriate for the chapters topic, and not write past the strict topic. Only write strictly about " + ShortBook[i][j] + " and do not progess into any other topics/eras/areas/sections that lie outside of the " + ShortBook[i][j] + ".Make sure to only include factual informaation.", 0.5, 2048)
             num_chars = len(response)
             num_words = len(response.split(' '))
             total_chars += num_chars
@@ -253,7 +253,5 @@ for town_name, state in towns:
 
     print(f"All sections completed. {total_chars} CHAR. {total_words} WORDS saved!") 
     outputfile = savefile.replace('.txt', '.docx')
-    txt_to_docx(savefile,outputfile,town)
-    generate_amazon_description(savefile,town)
-
-
+    txt_to_docx(savefile,outputfile,company)
+    generate_amazon_description(savefile,company)
