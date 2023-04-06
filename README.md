@@ -3,10 +3,25 @@
 DillPickle is a Python program that generates a company diligence report for a list of companies located in towns.csv. The program uses OpenAI's GPT-3 language model to generate text for each section of the report. The generated text is then saved to a text file and converted to a Microsoft Word document using the python-docx library.
 
 ## Installation
+1. Clone this repository
+```
+git clone https://github.com/nitebyte/DillPickle.git
+```
+2. Install the required modules:
 
-1. Clone the repository: `git clone https://github.com/nitebyte/DillPickle.git`
-2. Install the required packages: `pip install -r requirements.txt`
-3. Set your OpenAI API key as an environment variable or replace the `openai.api_key` variable in DillPickle.py with your API key.
+   - `openai`
+   - `ebooklib`
+   - `docx`
+   - `requests`
+   - `json`
+   
+3. Get an OpenAI API key [here](https://beta.openai.com/signup/).
+4. Replace the `api_key` in the `PR` function and the `headers` dictionary with your OpenAI API key.
+5. Run the program with the command:
+```
+python TripTeller.py
+```
+6. Your completed reports(s) will be saved as a `.docx` file in the same directory.
 
 ## Usage
 
@@ -36,9 +51,6 @@ Weyland-Yutani, Null.docx
 The text files will contain the generated text for each section of the company diligence report for the respective town. The Microsoft Word documents will contain the same text formatted as a book with a title page, copyright page, dedication page, and table of contents.
 
 ## Credits
-
-DillPickle was created by Benjamin Sanders. The program uses the following libraries:
-
 - OpenAI
 - ebooklib
 - csv
@@ -48,5 +60,4 @@ DillPickle was created by Benjamin Sanders. The program uses the following libra
 - python-docx
 
 ## License
-
 DillPickle is licensed under the MIT License. See LICENSE for more information.
